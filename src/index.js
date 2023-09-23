@@ -1,28 +1,43 @@
-import { cwd } from 'node:process';
-import fs from 'fs';
-import _ from 'lodash'
-import path from 'path'
+import process from 'process';
+import path from 'path';
+import { readFileSync } from 'fs';
+import YAML from 'yaml';
+import { compareFiles } from './filesCompare.js';
+import { choiceFormat } from './formatters/index.js';
 
-const readFile = (filepath) => filepath.readFileSync(filepath, 'utf-8');
-
-const writeFile = (filepath, content) => filepath.writeFileSync(filepath, content, 'utf-8');
-
-const diff = (pathfile1, pathfile2) => {
-    const keys = _.union(Object.keys(pathfile1), Object.keys(pathfile2)).sort();
-    const diff = keys.map((key) => {
-        if (!_.has(pathfile1, key)) {
-            return `  + ${key}: ${pathfile2[key]}`;
-        }
-        if (!_.has(pathfile2, key)) {
-            return `  - ${key}: ${pathfile1[key]}`;
-        }
-        if (pathfile1[key] === pathfile2[key]) {
-            return `    ${key}: ${pathfile1[key]}`;
-        }
-        return `  - ${key}: ${pathfile1[key]}\n + ${key}: ${pathfile2[key]}`;
-
-    });
-    return `{\n ${diff.join('\n')}\n}`;
+const parsing = {
+    json: JSON.parse,
+    yaml: YAML.parse,
+    yml: YAML.parse,
 };
 
-const gendiff = ()
+const getFileType = (filepath) => path.extname(filepath).slice(1);
+const getFilePath = (filepath) => path.resolve(process.cwd(), filepath);
+const readFile = (filepath) => readFileSync(getFilePath(filepath), 'utf-8');
+
+const parse = (data, ext) => {
+    const parseFunction = parsing[ext];
+    if (!parseFunction) {
+        throw new Error(`Unknown format ${ext}!`);
+    }
+    return parsing[ext](data);
+};
+
+const gendiff = (filepath1, filepath2, format = 'stylish') => {
+    const ext1 = getFileType(filepath1);
+    const ext2 = getFileType(filepath2);
+
+    const path1 = getFilePath(filepath1);
+    const path2 = getFilePath(filepath2);
+
+    const data1 = readFile(path1);
+    const data2 = readFile(path2);
+
+    const parsedData1 = parse(data1, ext1);
+    const parsedData2 = parse(data2, ext2);
+
+    const diff = compareFiles(parsedData1, parsedData2);
+    return choiceFormat(diff, format);
+};
+
+export { gendiff };

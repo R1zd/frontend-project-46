@@ -2,22 +2,18 @@
 import { Command } from 'commander';
 import { gendiff } from '../src/index.js'
 
-const programm = new Command;
-programm
+const program = new Command();
+
+program
   .name('gendiff')
   .description('Compares two configuration files and shows a difference.')
-  .version('1.0.0')
-  .option('-h, --help', 'output usage information')
-  .argument('filepath1')
-  .argument('filepath2')
+  .option('-V, --version', 'output the version number')
   .option('-f, --format <type>', 'output format', 'stylish')
+  .argument('<filepath1>')
+  .argument('<filepath2>')
   .action((filepath1, filepath2) => {
-    const option = programm.opts();
-    console.log(gendiff(filepath1, filepath2, option.format));
+    const options = program.opts().format;
+    const result = gendiff(filepath1, filepath2, options);
+    console.log(result);
   });
-
-if (programm.help) {
-  programm.outputHelp();
-};
-
-programm.parse();
+program.parse();
