@@ -1,3 +1,7 @@
+/* eslint-disable eol-last */
+/* eslint-disable linebreak-style */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable linebreak-style */
 import _ from 'lodash';
 
 const getIdent = (depth, replacer = ' ', spacesCount = 4) => replacer.repeat((depth * spacesCount) - 2);

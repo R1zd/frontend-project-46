@@ -1,14 +1,18 @@
-import getStylish from "./stylish.js";
-
+/* eslint-disable consistent-return */
+/* eslint-disable eol-last */
+/* eslint-disable linebreak-style */
+/* eslint-disable import/prefer-default-export */
+/* eslint-disable linebreak-style */
+import getStylish from './stylish.js';
 
 export const choiceFormat = (file, format) => {
-  switch(format) {
+  switch (format) {
     case 'stylish':
       return getStylish(file);
     case 'plain':
-      return ;
+      return;
     case 'json':
-      return ;
+      return;
     default:
       throw new Error(`Unknown ${format}`);
   }
