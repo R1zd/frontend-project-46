@@ -3,6 +3,7 @@
 /* eslint-disable linebreak-style */
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable linebreak-style */
+import getPlain from './plain.js';
 import getStylish from './stylish.js';
 
 export const choiceFormat = (file, format) => {
@@ -10,9 +11,9 @@ export const choiceFormat = (file, format) => {
     case 'stylish':
       return getStylish(file);
     case 'plain':
-      return;
+      return getPlain(file);
     case 'json':
-      return;
+      return JSON.stringify(file);
     default:
       throw new Error(`Unknown ${format}`);
   }
