@@ -1,39 +1,51 @@
+/* eslint-disable import/prefer-default-export */
 import _ from 'lodash';
 
-const stringify = (data) => {
+const getIdent = (depth, replacer = ' ', spacesCount = 4) => replacer.repeat((depth * spacesCount) - 2);
+const getBrackeIndent = (depth, replacer = ' ', spacesCount = 4) => replacer.repeat((depth * spacesCount) - spacesCount);
+
+const stringify = (data, depth = 1) => {
   if (!_.isPlainObject(data)) return `${data}`;
 
-  const lines = Object.entries(data).map(([key, value]) => `${key}: ${stringify(value)}`);
-  return `{ ${lines.join(', ')} }`;
+  const currentIndent = getIdent(depth);
+  const bracketIndent = getBrackeIndent(depth);
+  const currentValue = Object.entries(data);
+
+  const lines = currentValue.map(([key, value]) => `${currentIndent}  ${key}: ${stringify(value, depth + 1)}`);
+
+  const result = ['{', ...lines, `${bracketIndent}}`].join('\n');
+  return result;
 };
 
-const getStylish = (tree, depth = 1) => {
-  const indent = ' '.repeat(depth * 4);
-  const lines = tree.flatMap((node) => {
-    const {
-      key, children, status, value1, value2,
-    } = node;
-
-    switch (status) {
-      case 'nested':
-        return `${indent}${key}: ${getStylish(children, depth + 1)}`;
-      case 'deleted':
-        return `${indent}- ${key}: ${stringify(value1)}`;
-      case 'added':
-        return `${indent}+ ${key}: ${stringify(value2)}`;
-      case 'unchanged':
-        return `${indent}  ${key}: ${stringify(value1)}`;
-      case 'changed':
-        return [
-          `${indent}- ${key}: ${stringify(value1)}`,
-          `${indent}+ ${key}: ${stringify(value2)}`,
-        ];
-      default:
-        throw new Error(`Unknown type ${status}.`);
-    }
-  });
-
-  return `{\n${lines.join('\n')}\n${' '.repeat((depth - 1) * 4)}}`;
+const getStylish = (tree) => {
+  const iter = (currentValue, depth = 1) => {
+    const currentIndent = getIdent(depth);
+    const bracketIndent = getBrackeIndent(depth);
+    const lines = currentValue.flatMap((node) => {
+      const {
+        key, children, status, value1, value2,
+      } = node;
+      switch (status) {
+        case 'nested':
+          return `${currentIndent}  ${key}: ${iter(children, depth + 1)}`;
+        case 'deleted':
+          return `${currentIndent}- ${key}: ${stringify(value1, depth + 1)}`;
+        case 'added':
+          return `${currentIndent}+ ${key}: ${stringify(value2, depth + 1)}`;
+        case 'unchanged':
+          return `${currentIndent}  ${key}: ${stringify(value1, depth + 1)}`;
+        case 'changed':
+          return [
+            `${currentIndent}- ${key}: ${stringify(value1, depth + 1)}`,
+            `${currentIndent}+ ${key}: ${stringify(value2, depth + 1)}`,
+          ];
+        default:
+          throw new Error(`Unknown type ${status}.`);
+      }
+    });
+    return ['{', ...lines, `${bracketIndent}}`].join('\n');
+  };
+  return iter(tree);
 };
 
 export default getStylish;

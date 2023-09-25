@@ -33,7 +33,6 @@ const compareFiles = (data1, data2) => {
       key, value1, value2, status: 'changed',
     };
   });
-  console.log(conditions);
   return conditions;
 };
 
