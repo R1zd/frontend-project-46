@@ -6,17 +6,13 @@ const getBrackeIndent = (depth, replacer = ' ', spacesCount = 4) => replacer.rep
 
 const stringify = (data, depth = 1) => {
   if (!_.isPlainObject(data)) return `${data}`;
-
   const currentIndent = getIdent(depth);
   const bracketIndent = getBrackeIndent(depth);
   const currentValue = Object.entries(data);
-
   const lines = currentValue.map(([key, value]) => `${currentIndent}  ${key}: ${stringify(value, depth + 1)}`);
-
   const result = ['{', ...lines, `${bracketIndent}}`].join('\n');
   return result;
 };
-
 const getStylish = (tree) => {
   const iter = (currentValue, depth = 1) => {
     const currentIndent = getIdent(depth);
@@ -47,5 +43,4 @@ const getStylish = (tree) => {
   };
   return iter(tree);
 };
-
 export default getStylish;
