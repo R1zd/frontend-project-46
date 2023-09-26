@@ -16,4 +16,18 @@
 ## Требования:
 #### Требуется node.js версия 13.2.0 и выше (проверить версию установленной node возможно командой в терминале node -v)
 
+#### Help:
 [![asciicast](https://asciinema.org/a/610531.svg)](https://asciinema.org/a/610531)
+
+#### JSON flat example: 
+[![asciicast](https://asciinema.org/a/610532.svg)](https://asciinema.org/a/610532)
+
+#### YAML/YML flat example
+[![asciicast](https://asciinema.org/a/610533.svg)](https://asciinema.org/a/610533)
+
+### Plain example:
+[![asciicast](https://asciinema.org/a/610535.svg)](https://asciinema.org/a/610535)
+
+### JSON example:
+[![asciicast](https://asciinema.org/a/610537.svg)](https://asciinema.org/a/610537)
+
