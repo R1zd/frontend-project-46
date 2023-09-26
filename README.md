@@ -15,3 +15,5 @@
  #### Генерация отчета в виде plain text, stylish и json
 ## Требования:
 #### Требуется node.js версия 13.2.0 и выше (проверить версию установленной node возможно командой в терминале node -v)
+
+[![asciicast](https://asciinema.org/a/610531.svg)](https://asciinema.org/a/610531)
