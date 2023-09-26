@@ -1,5 +1,5 @@
 {
-  "name": "abob",
+  "name": "@hexlet/code",
   "version": "1.0.0",
   "description": "second project Hexlet",
   "main": "src/index.js",
