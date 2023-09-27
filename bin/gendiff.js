@@ -5,7 +5,7 @@
 /* eslint-disable import/prefer-default-export */
 /* eslint-disable linebreak-style */
 import { Command } from 'commander';
-import { gendiff } from '../src/index.js';
+import gendiff from '../src/index.js';
 
 const program = new Command();
 
