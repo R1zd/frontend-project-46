@@ -43,4 +43,4 @@ const gendiff = (filepath1, filepath2, format = 'stylish') => {
   return choiceFormat(diff, format);
 };
 
-export { gendiff };
+export default gendiff;
